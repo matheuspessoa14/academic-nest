@@ -9,11 +9,14 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { AlunosService } from './alunos.service.js';
+import { AlunosService } from './alunos.service';
 
 @Controller('alunos')
 export class AlunosController {
-  constructor(private readonly alunosService: AlunosService) {}
+  constructor(
+    private readonly alunosService:
+      AlunosService,
+  ) {}
 
   @Get()
   findAll() {
@@ -21,29 +24,54 @@ export class AlunosController {
   }
 
   @Get(':id')
-  findById(@Param('id', ParseIntPipe) id: number) {
+  findById(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
     return this.alunosService.findById(id);
   }
 
   @Post()
-  create(@Body() body: { nome: string; curso: string }) {
-    return this.alunosService.create(body.nome, body.curso);
+  create(
+    @Body()
+    body: {
+      nome: string;
+      email: string;
+      curso: string;
+    },
+  ) {
+    return this.alunosService.create(
+      body.nome,
+      body.email,
+      body.curso,
+    );
   }
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe)
+    id: number,
+
     @Body()
     body: {
       nome: string;
+      email: string;
       curso: string;
     },
   ) {
-    return this.alunosService.update(id, body.nome, body.curso);
+    return this.alunosService.update(
+      id,
+      body.nome,
+      body.email,
+      body.curso,
+    );
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(
+    @Param('id', ParseIntPipe)
+    id: number,
+  ) {
     return this.alunosService.delete(id);
   }
 }

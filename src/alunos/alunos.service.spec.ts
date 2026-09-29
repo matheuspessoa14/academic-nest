@@ -1,18 +1,51 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AlunosService } from './alunos.service.js';
+import { Injectable } from '@nestjs/common';
 
-describe('AlunosService', () => {
-  let service: AlunosService;
+import { AlunosRepository } from './alunos.repository';
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AlunosService],
-    }).compile();
+@Injectable()
+export class AlunosService {
+  constructor(
+    private readonly alunosRepository:
+      AlunosRepository,
+  ) {}
 
-    service = module.get<AlunosService>(AlunosService);
-  });
+  findAll() {
+    return this.alunosRepository.findAll();
+  }
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+  findById(id: number) {
+    return this.alunosRepository.findById(id);
+  }
+
+  create(
+    nome: string,
+    email: string,
+    curso: string,
+  ) {
+    return this.alunosRepository.create(
+      nome,
+      email,
+      curso,
+    );
+  }
+
+  async update(
+    id: number,
+    nome: string,
+    email: string,
+    curso: string,
+  ) {
+    await this.alunosRepository.update(
+      id,
+      nome,
+      email,
+      curso,
+    );
+
+    return this.alunosRepository.findById(id);
+  }
+
+  delete(id: number) {
+    return this.alunosRepository.delete(id);
+  }
+}
